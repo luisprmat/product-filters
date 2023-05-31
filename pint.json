@@ -1,0 +1,7 @@
+{
+    "rules": {
+        "class_attributes_separation": {
+            "property": "none"
+        }
+    }
+}
