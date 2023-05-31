@@ -12,6 +12,13 @@ class Product extends Model
 
     protected $fillable = ['name', 'description', 'price', 'category_id', 'manufacturer_id'];
 
+    const PRICES = [
+        'Menos de $5.000',
+        'Entre $5.000 y $10.000',
+        'Entre $10.000 y $50.000',
+        'Más de $50.000',
+    ];
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
