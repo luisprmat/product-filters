@@ -6,6 +6,8 @@
                 <div class="mt-3">
                     <a href="#" class="text-2xl text-indigo-500 hover:underline">{{ $product->name }}</a>
                 </div>
+                <p class="text-sm"><span class="font-bold italic">Categoría:</span> {{ $product->category->name }}</p>
+                <p class="text-sm"><span class="font-bold italic">Fabricante:</span> {{ $product->manufacturer->name }}</p>
                 <h5 class="mt-3">${{ number_format($product->price, 0) }}</h5>
                 <p class="mt-3">{{ $product->description }}</p>
             </div>

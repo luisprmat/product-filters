@@ -32,9 +32,10 @@ class PriceService
 
     private function getProductCount($index): int
     {
-        return Product::when($index == 0, function (Builder $query) {
-            $query->where('price', '<', '5000');
-        })
+        return Product::withFilters($this->prices, $this->categories, $this->manufacturers)
+            ->when($index == 0, function (Builder $query) {
+                $query->where('price', '<', '5000');
+            })
             ->when($index == 1, function (Builder $query) {
                 $query->whereBetween('price', ['5000', '10000']);
             })
