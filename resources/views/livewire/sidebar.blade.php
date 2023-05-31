@@ -29,12 +29,19 @@
     <div x-data="{
         open: true,
         search: '',
+        startIndex: 0,
+        endIndex: 2,
         options: @entangle('categories'),
         selected: @entangle('selected.categories'),
         get searchResults() {
             return this.options.filter(
                 i => i.name.toLowerCase().includes(this.search.toLowerCase())
             )
+        },
+        get results() {
+          return this.options.filter((val, index) => {
+            return index >= this.startIndex && index <= this.endIndex
+          })
         }
     }">
         <h3 class="mt-2 mb-1 text-2xl">
@@ -51,10 +58,30 @@
             x-transition:leave.duration.300ms
         >
             <input x-model="search" class="mb-2 w-full rounded-md border border-gray-400 px-2 py-1 text-sm" placeholder="Buscar categorías">
-            <template x-for="(option, index) in searchResults" :key="option.id">
+            <template x-if="search.length > 0">
                 <div>
-                    <input type="checkbox" :id="'category' + index" :value="option.id" x-model="selected">
-                    <label :for="'category' + index" x-text="option.name + ' (' + option.products_count + ')'"></label>
+                    <template x-for="(option, index) in searchResults" :key="option.id">
+                        <div>
+                            <input type="checkbox" :id="'category' + index" :value="option.id" x-model="selected">
+                            <label :for="'category' + index" x-text="option.name + ' (' + option.products_count + ')'"></label>
+                        </div>
+                    </template>
+                </div>
+            </template>
+            <template x-if="search.length === 0">
+                <div>
+                    <template x-for="(option, index) in results" :key="option.id">
+                        <div>
+                            <input type="checkbox" :id="'category' + index" :value="option.id" x-model="selected">
+                            <label :for="'category' + index" x-text="option.name + ' (' + option.products_count + ')'"></label>
+                        </div>
+                    </template>
+                    <template x-if="endIndex != options.length">
+                        <div class="mt-1 cursor-pointer font-medium text-indigo-500" @click="endIndex = options.length">Mostrar más ...</div>
+                    </template>
+                    <template x-if="endIndex === options.length">
+                        <div class="mt-1 cursor-pointer font-medium text-indigo-500" @click="endIndex = 2">Mostrar menos ...</div>
+                    </template>
                 </div>
             </template>
         </div>
