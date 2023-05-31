@@ -26,7 +26,17 @@
         </div>
     </div>
 
-    <div x-data="{ open: true }">
+    <div x-data="{
+        open: true,
+        search: '',
+        options: @entangle('categories'),
+        selected: @entangle('selected.categories'),
+        get searchResults() {
+            return this.options.filter(
+                i => i.name.toLowerCase().includes(this.search.toLowerCase())
+            )
+        }
+    }">
         <h3 class="mt-2 mb-1 text-2xl">
             <button @click="open = !open" class="flex w-full items-center justify-between text-left">
                 Categorías
@@ -40,14 +50,13 @@
             x-transition:enter.duration.300ms
             x-transition:leave.duration.300ms
         >
-            @foreach($categories as $index => $category)
+            <input x-model="search" class="mb-2 w-full rounded-md border border-gray-400 px-2 py-1 text-sm" placeholder="Buscar categorías">
+            <template x-for="(option, index) in searchResults" :key="option.id">
                 <div>
-                    <input type="checkbox" id="category{{ $index }}" value="{{ $category['id'] }}" wire:model="selected.categories">
-                    <label for="category{{ $index }}">
-                        {{ $category['name'] }} ({{ $category['products_count'] }})
-                    </label>
+                    <input type="checkbox" :id="'category' + index" :value="option.id" x-model="selected">
+                    <label :for="'category' + index" x-text="option.name + ' (' + option.products_count + ')'"></label>
                 </div>
-            @endforeach
+            </template>
         </div>
     </div>
 
