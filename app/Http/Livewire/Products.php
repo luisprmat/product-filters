@@ -5,10 +5,13 @@ namespace App\Http\Livewire;
 use App\Models\Product;
 use Illuminate\View\View;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Products extends Component
 {
-    protected $selected = [
+    use WithPagination;
+
+    public array $selected = [
         'prices' => [],
         'categories' => [],
         'manufacturers' => [],
@@ -19,6 +22,7 @@ class Products extends Component
     public function setSelected($selected): void
     {
         $this->selected = $selected;
+        $this->resetPage();
     }
 
     public function render(): View
@@ -27,7 +31,7 @@ class Products extends Component
             $this->selected['prices'],
             $this->selected['categories'],
             $this->selected['manufacturers']
-        )->get();
+        )->paginate(6);
 
         return view('livewire.products', compact('products'));
     }
